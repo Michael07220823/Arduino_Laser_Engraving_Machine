@@ -1,5 +1,0 @@
-{
-    "sketch": "Input_string\\Input_string.ino",
-    "board": "arduino:avr:uno",
-    "port": "COM3"
-}
