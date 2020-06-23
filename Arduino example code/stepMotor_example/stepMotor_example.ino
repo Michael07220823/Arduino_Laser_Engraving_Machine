@@ -6,9 +6,9 @@
 
 // defines pins numbers
 const int x_stepPin = 2;
-const int x_dirPin = 5; 
-const int y_stepPin = 3; 
-const int y_dirPin = 6; 
+const int x_dirPin = 3; 
+const int y_stepPin = 4; 
+const int y_dirPin = 5; 
 
 void setup() {
   // Sets the two pins as Outputs
