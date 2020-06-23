@@ -10,7 +10,7 @@ const int ledPin = 8;
 
 // Defines xy axis num.
 const int x_step = 20;
-const int y_step = 50;
+const int y_step = 30;
 int x_axis_count = 0;
 int y_axis_count = 0;
 
@@ -19,13 +19,13 @@ const int laserPower = 10;
 const int laserPoweroff = 0; 
 
 // String array
-String textBox="";
+String textBox = "";
 
 
 void setup() {
     Serial.begin(9600);
-    Serial.println("Init Serial...");
-    Serial.print("Please input number from 0 to 9:");
+    Serial.println("[INFO] Init Serial...");
+    Serial.print("[INFO] Please input number from 0 to 9:");
     
     // Settings pin status.
     pinMode(x_stepPin, OUTPUT); 
@@ -38,6 +38,7 @@ void setup() {
     pinMode(ledPin, OUTPUT);
 
     // Testing step motor.
+    // 馬達正轉   
     digitalWrite(x_dirPin, HIGH); // Enables the motor to move in a particular direction
     digitalWrite(y_dirPin, LOW); // Enables the motor to move in a particular direction
     // Makes 300 pulses for making one full cycle rotation
@@ -51,6 +52,7 @@ void setup() {
     }
     delay(1000); // One second delay
 
+    // 馬達反轉   
     digitalWrite(x_dirPin, LOW); //Changes the rotations direction
     digitalWrite(y_dirPin, HIGH); //Changes the rotations direction
     // Makes 300 pulses for making two full cycle rotation
@@ -79,7 +81,7 @@ void loop() {
         
         textBox = Serial.readString();
         Serial.println(textBox);
-  
+
         for(int i=0; i<textBox.length(); i++){
             switch(textBox[i]){
                 case 'b':
@@ -130,15 +132,21 @@ void loop() {
             // x axis reset.
             x_axis_count=0;
         }
-    // Machine status.
-    digitalWrite(ledPin, LOW);
-    digitalWrite(bzPin, HIGH);
-    delay(500);
-    digitalWrite(bzPin, LOW);
+        // y axis reset.
+        return_y(y_axis_count);
+        y_axis_count=0;
 
-    // y axis reset.
-    return_y(y_axis_count);
-    y_axis_count=0;
+        digitalWrite(x_stepPin, LOW);
+        digitalWrite(y_stepPin, LOW);
+        
+        // Machine status.
+        digitalWrite(ledPin, LOW);
+        digitalWrite(bzPin, HIGH);
+        delay(500);
+        digitalWrite(bzPin, LOW);
+
+        Serial.println();
+        Serial.println("[INFO] Finish !");
     }
 }
 
@@ -284,18 +292,18 @@ int line()
         digitalWrite(x_stepPin, LOW);  
         delay(10);
     }
-      analogWrite(laserPin, laserPoweroff);
-      delay(1000);
+    analogWrite(laserPin, laserPoweroff);
+    delay(1000);
     
     // 空一格 
     for(int x = x_step; x > 0; x--) 
-     {
+    {
         digitalWrite(x_stepPin, HIGH); 
         delayMicroseconds(500); 
         digitalWrite(x_stepPin, LOW);  
         delayMicroseconds(500);
-     }
-     delay(500);
+    }
+    delay(500);
     x_axis_count += 3;
 }
 
@@ -340,6 +348,7 @@ void nextline()
 }
 
 void goBack(){
+    // 馬達正轉    
     digitalWrite(x_dirPin, HIGH); // Enables the motor to move in a particular direction
     digitalWrite(y_dirPin, LOW); // Enables the motor to move in a particular direction
     // Makes 300 pulses for making one full cycle rotation
@@ -353,6 +362,7 @@ void goBack(){
     }
     delay(1000); // One second delay
 
+    // 馬達反轉
     digitalWrite(x_dirPin, LOW); //Changes the rotations direction
     digitalWrite(y_dirPin, HIGH); //Changes the rotations direction
     // Makes 300 pulses for making two full cycle rotation
